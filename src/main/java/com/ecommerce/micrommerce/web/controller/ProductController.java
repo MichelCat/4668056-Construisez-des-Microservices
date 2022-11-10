@@ -91,6 +91,6 @@ public class ProductController {
     
     @GetMapping("/TriProduits")
     public List<Product> trierProduitsParOrdreAlphabetique() {
-        return productDao.findByOrderByNomAsc();
+        return productDao.findAllByOrderByNom();
     }
 }
