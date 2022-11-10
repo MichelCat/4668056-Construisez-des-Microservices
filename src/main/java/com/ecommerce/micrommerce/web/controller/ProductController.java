@@ -86,4 +86,9 @@ public class ProductController {
       jsonString += "}"; 
       return jsonString;
     }
+    
+    @GetMapping("/TriProduits")
+    public List<Product> trierProduitsParOrdreAlphabetique() {
+        return productDao.findByOrderByNomAsc();
+    }
 }
