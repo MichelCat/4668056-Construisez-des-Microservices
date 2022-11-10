@@ -6,8 +6,11 @@ import com.ecommerce.micrommerce.web.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -61,5 +64,26 @@ public class ProductController {
                 .buildAndExpand(productAdded.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+    
+    @GetMapping("/AdminProduits")
+    public String calculerMargeProduit() {
+      List<Product> produits = productDao.findAll();
+      
+      String jsonString = "";
+      for (Product produit : produits) {
+        if (jsonString.isEmpty())
+          jsonString = "{";
+        else
+          jsonString += ",";
+        jsonString += "\"Product{"
+                  + "id=" + produit.getId()
+                  + ", nom='" + produit.getNom() + "'"
+                  + ", prix=" + produit.getPrix()
+                  + "}\": "
+                  + (produit.getPrix() - produit.getPrixAchat());
+      }
+      jsonString += "}"; 
+      return jsonString;
     }
 }
